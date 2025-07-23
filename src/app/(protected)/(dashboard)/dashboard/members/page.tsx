@@ -48,7 +48,7 @@ const Members = () => {
 
   const startPolling = () => {
     if (!intervalRef.current) {
-      intervalRef.current = setInterval(fetchMembers, 60000); 
+      intervalRef.current = setInterval(fetchMembers, 30000); 
     }
   };
 

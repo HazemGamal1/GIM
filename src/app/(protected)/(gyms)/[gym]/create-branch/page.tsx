@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { HiMapPin } from "react-icons/hi2";
 import { usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 const GymMap = dynamic(() => import('@/components/Map'), { ssr: false });
 
 
@@ -20,7 +21,7 @@ const CREATE_BRANCH = () => {
   const [branchIsVisible, setBranchIsVisible] = useState<boolean>(false);
   const [locationY, setLocationY] = useState<number>();
   const [locationX, setLocationX] = useState<number>();
-
+  const router = useRouter();
   const onSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();   
     try {
@@ -32,6 +33,10 @@ const CREATE_BRANCH = () => {
         body: JSON.stringify({ name, gymId, locationX, locationY, locationName, branchIsVisible })
       })
       const data = await res.json();
+
+      if(res.ok){
+        router.push("/dashboard")
+      }
       console.log(data);
     }catch(error){
       console.log(error);

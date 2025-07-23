@@ -35,14 +35,12 @@ export async function GET(req: NextRequest) {
 
     const ownerGymIds = user.gyms.map((gym) => gym.id);
 
-    // Combine and deduplicate gym IDs
     const uniqueGymIds = Array.from(new Set([...ownerGymIds, ...trainerGymIds]));
 
     if (uniqueGymIds.length === 0) {
       return NextResponse.json({ error: "No gyms found for this user" }, { status: 404 });
     }
 
-    // Fetch full gym data
     const gyms = await prisma.gym.findMany({
       where: { id: { in: uniqueGymIds } },
       include: {
