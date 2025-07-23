@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// now adapted for PostgreSQL and Railway
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  CO_OWNER
+  TRAINER
+  MEMBER
+}
+
+enum Permission {
+  MANAGE_GYM
+  MANAGE_BRANCH
+  VIEW_MEMBERS
+  EDIT_MEMBERS
+  ASSIGN_WORKOUTS
+  VIEW_PROGRESS
+  MANAGE_TRAINERS
+}
+
+model User {
+  id          String           @id @default(uuid()) @db.Uuid
+  clerkId     String           @unique
+  email       String           @unique
+  name        String
+  role        Role             @default(TRAINER)
+  permissions String[]         @default([])
+
+  gyms              Gym[]               @relation("OwnerGyms")
+  trainerAssignments BranchTrainer[]
+  assignedMembers    Member[]           @relation("TrainerMembers")
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Gym {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  owner     User     @relation("OwnerGyms", fields: [ownerId], references: [id])
+  ownerId   String   @db.Uuid
+
+  branches  Branch[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Branch {
+  id                   String   @id @default(uuid()) @db.Uuid
+  name                 String
+  locationX            Float
+  locationY            Float
+  locationName         String
+  gym                  Gym     @relation(fields: [gymId], references: [id])
+  gymId                String   @db.Uuid
+  branchIsVisible      Boolean
+
+  trainerAssignments   BranchTrainer[] 
+  members              Member[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Workout {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String
+  description String?
+  date        DateTime
+  member      Member   @relation(fields: [memberId], references: [id])
+  memberId    String   @db.Uuid
+
+  createdAt   DateTime @default(now())
+}
+
+model BranchTrainer {
+  id        String   @id @default(uuid()) @db.Uuid
+  branch    Branch   @relation(fields: [branchId], references: [id])
+  branchId  String   @db.Uuid
+  trainer   User     @relation(fields: [trainerId], references: [id])
+  trainerId String   @db.Uuid
+
+  assignedAt DateTime @default(now())
+
+  @@unique([branchId, trainerId])
+}
+
+model Member {
+  id              String   @id @default(uuid()) @db.Uuid
+  firstName       String
+  lastName        String
+  phone           String?
+  email           String?
+  birthDate       DateTime?
+  gender          Gender?
+  notes           String?
+  startDate       DateTime
+  endDate         DateTime
+
+  trainer         User?    @relation("TrainerMembers", fields: [trainerId], references: [id])
+  trainerId       String?  @db.Uuid
+
+  branch          Branch   @relation(fields: [branchId], references: [id])
+  branchId        String   @db.Uuid
+
+  workouts        Workout[]
+  progressLogs    ProgressLog[]
+
+  membershipId    String   @db.Uuid
+  membership      Membership @relation(fields: [membershipId], references: [id])
+
+  payments        Payment[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Payment {
+  id        String   @id @default(uuid()) @db.Uuid
+  memberId  String   @db.Uuid
+  amount    Float
+  type      PaymentType
+  createdAt DateTime @default(now())
+  member    Member   @relation(fields: [memberId], references: [id])
+}
+
+model Membership  {
+  id                String    @id @default(uuid()) @db.Uuid
+  name              String  
+  price             Float
+  duration          Int
+  standardBenefits  StandardBenefits[]
+  customBenefits    String[]
+  members           Member[]
+}
+
+model ProgressLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  member    Member   @relation(fields: [memberId], references: [id])
+  memberId  String   @db.Uuid
+  date      DateTime @default(now())
+  weight    Float?
+  bodyFat   Float?
+  notes     String?
+
+  createdAt DateTime @default(now())
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum MemberTypes {
+  DEFAULT
+  PREMIUM
+  DELUXE
+  VIP
+}
+
+enum PaymentType  {
+  MEMBERSHIP
+  PERSONAL_TRAINING
+  PRODUCT
+  OTHER
+}
+
+enum StandardBenefits {
+  SAUNA
+  PERSONAL_TRAINER
+  GROUP_CLASSES
+  SWIMMING_POOL
+}
