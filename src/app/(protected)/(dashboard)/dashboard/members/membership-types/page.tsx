@@ -29,6 +29,7 @@ import { deleteMembership } from '@/lib/api/memberships'
 import { ImSpinner } from 'react-icons/im'
 
 const Membership_Types = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [name, setName] = useState<string>();
   const [price, setPrice] = useState<number>(0.0);
   const [duration, setDuration] = useState<number>(0);
@@ -58,6 +59,7 @@ const Membership_Types = () => {
         const res = await fetch("/api/memberships/get-all");
         const data = await res.json();
         setMembershipTypes(data);
+        setDialogOpen(false);
       }catch(error){
         console.log(error);
       }finally{
@@ -75,7 +77,7 @@ const Membership_Types = () => {
     <div className='w-full p-12 rounded-md'>
       <div className='flex w-full justify-between items-center mb-12'>
         <div className='font-semibold'>Membership types</div>
-        <Dialog>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button variant={"material_purple"}><Plus /> Add Now</Button>
             </DialogTrigger>

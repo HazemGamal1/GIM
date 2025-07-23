@@ -19,6 +19,7 @@ import { MdAutorenew, MdOutlineArrowRight } from "react-icons/md";
 
 const MembershipRenew = () => {
     const [memberId, setMemberId] = useState<string>("")
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [membershipId, setMembershipId] = useState<string>("");
     const [startDate, setStartDate] = useState<Date>();
     const [amount, setAmount] = useState<number>();
@@ -37,8 +38,8 @@ const MembershipRenew = () => {
             },
             body: JSON.stringify(dataOP)
           });
-          const data = await res.json();
-          console.log(data);
+          await res.json();
+          setDialogOpen(false);       
         }catch(error){
           console.log(error);
         }
@@ -51,7 +52,7 @@ const MembershipRenew = () => {
     }
   return (
     <div>
-        <Dialog>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
                 <Button variant={"material_black"}  className='flex gap-2 items-center cursor-pointer'>
                     <MdAutorenew />

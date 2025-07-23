@@ -64,7 +64,7 @@ const MemberActivation = () => {
         body: JSON.stringify(dataOP)
       });
 
-      const data = await res.json();
+      await res.json();
       setDialogOpen(false);           
 
     } catch (error) {
