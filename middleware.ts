@@ -4,7 +4,10 @@ const isPublicRoute = createRouteMatcher(
     [
         '/sign-in(.*)',
         '/sign-up(.*)',
-        '/'
+        '/',
+        '/api/members/get-all',
+        '/api/gyms/full-data',
+        '/api/gyms/activate-member',
     ]
 )
 
