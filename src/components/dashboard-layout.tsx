@@ -2,7 +2,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Menu } from "lucide-react"
+import { Menu, Search } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -10,6 +10,7 @@ import { DashboardNav } from "@/components/dashboard-nav"
 import Logo from "./Logo"
 import { BiPlus } from "react-icons/bi"
 import { GymComboBox } from "./Gyms/Gym-Combo-box"
+import { Input } from "./ui/input"
 
 
 interface DashboardLayoutProps {
@@ -21,7 +22,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-[#f0f0f0] dark:border-[#2d2d2d] bg-[#fafafa] dark:bg-[#212121] px-2 py-0">
+      <header className="sticky backdrop-blur-sm top-0 z-30 flex h-16 items-center gap-4 border-b border-[#f0f0f0] dark:border-[#2d2d2d] dark:bg-[#212121] px-2 py-0">
         <Button variant="ghost" size="icon" className="md:hidden" aria-label="Toggle Menu">
           <Sheet>
             <SheetTrigger asChild>
@@ -63,12 +64,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </Link>
         <div className="ml-auto flex items-center gap-4">
-          {/* <form className="hidden md:block">
+          <form className="hidden md:block">
             <div className="relative rounded-sm">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input type="search" placeholder="Search..." className="w-[200px] pl-8 md:w-[240px] lg:w-[320px]" />
             </div>
-          </form> */}
+          </form>
           {/* <Button variant="ghost" size="icon" aria-label="Notifications" className="hover:text-black" asChild>
             <Link href={'/dashboard/members/trainers-staff'}>
               <HiMiniUserGroup className="h-5 w-5" />

@@ -48,11 +48,13 @@ model Gym {
   name      String
   owner     User     @relation("OwnerGyms", fields: [ownerId], references: [id])
   ownerId   String   @db.Uuid
-
   branches  Branch[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Optional unique constraint per owner
+  // @@unique([name, ownerId])
 }
 
 model Branch {
@@ -62,14 +64,19 @@ model Branch {
   locationY            Float
   locationName         String
   gym                  Gym     @relation(fields: [gymId], references: [id])
-  gymId                String   @db.Uuid
+  gymId                String  @db.Uuid
   branchIsVisible      Boolean
 
+  classes              Class[]
   trainerAssignments   BranchTrainer[] 
   members              Member[]
+  appointments         Appointment[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  // Optional unique constraint per gym
+  // @@unique([name, gymId])
 }
 
 model Workout {
@@ -90,9 +97,96 @@ model BranchTrainer {
   trainer   User     @relation(fields: [trainerId], references: [id])
   trainerId String   @db.Uuid
 
-  assignedAt DateTime @default(now())
+  classes     ClassTrainer[]
+  appointments Appointment[]
+  courses      Course[]
+  assignedAt   DateTime @default(now())
 
   @@unique([branchId, trainerId])
+}
+
+model Class {
+  id          String         @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  startTime   DateTime
+  endTime     DateTime
+  maxCapacity Int
+
+  branch      Branch      @relation(fields: [branchId], references: [id])
+  branchId    String      @db.Uuid
+
+  course      Course?     @relation(fields: [courseId], references: [id])
+  courseId    String?     @db.Uuid
+
+  trainers    ClassTrainer[]
+  attendees   ClassAttendee[]
+}
+
+model ClassTrainer {
+  id        String         @id @default(uuid()) @db.Uuid
+  class     Class          @relation(fields: [classId], references: [id])
+  classId   String         @db.Uuid
+  trainer   BranchTrainer  @relation(fields: [trainerId], references: [id])
+  trainerId String         @db.Uuid
+
+  @@unique([classId, trainerId])
+}
+
+model ClassAttendee {
+  id        String   @id @default(uuid()) @db.Uuid
+  class     Class    @relation(fields: [classId], references: [id])
+  classId   String   @db.Uuid
+  member    Member   @relation(fields: [memberId], references: [id])
+  memberId  String   @db.Uuid
+
+  @@unique([classId, memberId])
+}
+
+model Course {
+  id          String           @id @default(uuid()) @db.Uuid
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+  trainer     BranchTrainer    @relation(fields: [trainerId], references: [id])
+  trainerId   String           @db.Uuid
+
+  classes     Class[]
+  enrollments CourseEnrollment[]
+}
+
+model CourseEnrollment {
+  id         String   @id @default(uuid()) @db.Uuid
+  course     Course   @relation(fields: [courseId], references: [id])
+  courseId   String   @db.Uuid
+  member     Member   @relation(fields: [memberId], references: [id])
+  memberId   String   @db.Uuid
+  enrolledAt DateTime @default(now())
+
+  @@unique([courseId, memberId])
+}
+
+model Appointment {
+  id         String             @id @default(uuid()) @db.Uuid
+  member     Member             @relation(fields: [memberId], references: [id])
+  memberId   String             @db.Uuid
+  trainer    BranchTrainer      @relation(fields: [trainerId], references: [id])
+  trainerId  String             @db.Uuid
+  startTime  DateTime
+  endTime    DateTime
+  status     AppointmentStatus @default(PENDING)
+  notes      String?
+
+  branch     Branch?         @relation(fields: [branchId], references: [id])
+  branchId   String?         @db.Uuid
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
 }
 
 model Member {
@@ -116,10 +210,13 @@ model Member {
   workouts        Workout[]
   progressLogs    ProgressLog[]
 
-  membershipId    String   @db.Uuid
-  membership      Membership @relation(fields: [membershipId], references: [id])
+  membershipId    String       @db.Uuid
+  membership      Membership   @relation(fields: [membershipId], references: [id])
 
-  payments        Payment[]
+  payments            Payment[]
+  classes             ClassAttendee[]
+  appointments        Appointment[]
+  courseEnrollments   CourseEnrollment[]
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -134,7 +231,7 @@ model Payment {
   member    Member   @relation(fields: [memberId], references: [id])
 }
 
-model Membership  {
+model Membership {
   id                String    @id @default(uuid()) @db.Uuid
   name              String  
   price             Float
@@ -168,7 +265,7 @@ enum MemberTypes {
   VIP
 }
 
-enum PaymentType  {
+enum PaymentType {
   MEMBERSHIP
   PERSONAL_TRAINING
   PRODUCT
