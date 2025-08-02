@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import { Loader, Loader2, Pencil } from 'lucide-react'
+import { Loader2, Pencil } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { IoTime } from "react-icons/io5";
 import React from 'react'
