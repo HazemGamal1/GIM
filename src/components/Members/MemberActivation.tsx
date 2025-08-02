@@ -75,7 +75,7 @@ const MemberActivation = () => {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant={"material_purple"} className='flex gap-2 items-center cursor-pointer'>
+        <Button variant={"test"} className='flex gap-2 items-center cursor-pointer py-[20px]'>
           <UserPlus />
           <h4>Activate Memberships</h4>
         </Button>

@@ -19,6 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        test: "cursor-pointer text-white rounded-sm bg-[#435ad7] px-2 py-8 hover:bg-[#5e74e1] duration-300",
         link: "text-primary underline-offset-4 hover:underline",
         stylized: "bg-[#2d2d2d] text-white border-[#262626] border p-3 rounded-none font-semibold  flex gap-2 items-center",
         material_purple: "text-white bg-gradient-to-t from-[#6d48ff] to-[#8661ff] rounded-md border border-[#6c47ff] hover:to-[#8e6cff] cursor-pointer",

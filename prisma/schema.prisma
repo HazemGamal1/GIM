@@ -53,8 +53,6 @@ model Gym {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Optional unique constraint per owner
-  // @@unique([name, ownerId])
 }
 
 model Branch {
@@ -74,9 +72,6 @@ model Branch {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-
-  // Optional unique constraint per gym
-  // @@unique([name, gymId])
 }
 
 model Workout {
@@ -112,6 +107,8 @@ model Class {
   startTime   DateTime
   endTime     DateTime
   maxCapacity Int
+  status      String         @default("ongoing")
+  date        DateTime       @default(now())
 
   branch      Branch      @relation(fields: [branchId], references: [id])
   branchId    String      @db.Uuid

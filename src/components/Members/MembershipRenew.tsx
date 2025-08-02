@@ -54,7 +54,7 @@ const MembershipRenew = () => {
     <div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-                <Button variant={"material_black"}  className='flex gap-2 items-center cursor-pointer'>
+                <Button variant={"test"}  className='flex gap-2 items-center cursor-pointer py-[20px]'>
                     <MdAutorenew />
                     <h4>Renew Memberships</h4>
                 </Button>

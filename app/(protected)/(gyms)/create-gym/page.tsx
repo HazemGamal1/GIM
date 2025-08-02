@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { useUser } from '@clerk/nextjs';
 import { Switch } from '@/components/ui/switch';
 import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const Create_Gym = () => {
@@ -89,7 +89,7 @@ const Create_Gym = () => {
             <Switch />
           </div>
 
-          <Button variant={"material_purple"} type='submit' className='w-full mx-auto cursor-pointer'>Submit</Button>
+          <Button variant={"material_blue"} type='submit' className='w-full mx-auto cursor-pointer'>Submit <ChevronRight /></Button>
         </form>
       </div>
     </div>

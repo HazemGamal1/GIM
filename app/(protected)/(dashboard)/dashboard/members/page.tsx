@@ -74,7 +74,7 @@ const Members = () => {
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      stopPolling(); // Cleanup on unmount
+      stopPolling();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [page]);
@@ -88,22 +88,25 @@ const Members = () => {
 
   return ( 
     <div className='max-w-screen p-12'>
-      <p className='mb-2'>Configuration: </p>
-      <div className='flex flex-col lg:flex-row gap-2.5 items-center mb-4'>
-        <MemberActivation />
-        <MembershipRenew />
-        <Button variant={"material_black"} className='cursor-pointer' asChild>
-          <Link href={"/dashboard/members/membership-types"}>
-              <Users2 />
-              <h4>Membership types</h4>
-          </Link>
-        </Button>
-        <Button variant={"material_red"} className='cursor-pointer' asChild>
-          <Link href={"/dashboard/members/access-manager"}>
-              <SiCodestream />
-              <h4>Access Manager</h4>
-          </Link>
-        </Button>
+      <div className="w-full flex flex-row justify-between items-center mb-8">
+        <p className='mb-2'>Configuration: </p>
+
+        <div className='flex flex-col lg:flex-row gap-2.5 items-center mb-4'>
+          <MemberActivation />
+          <MembershipRenew />
+          <Button variant={"material_black"} className='cursor-pointer' asChild>
+            <Link href={"/dashboard/members/membership-types"}>
+                <Users2 />
+                <h4>Membership types</h4>
+            </Link>
+          </Button>
+          <Button variant={"material_red"} className='cursor-pointer' asChild>
+            <Link href={"/dashboard/members/access-manager"}>
+                <SiCodestream />
+                <h4>Access Manager</h4>
+            </Link>
+          </Button>
+        </div>
       </div>
       <span className="text-[#1561ef] hover:underline underline-blue-500 flex items-start gap-0.5 cursor-pointer mb-4">Generate Excel Sheet from this data <FaExternalLinkAlt className="text-xs"/></span>
 
