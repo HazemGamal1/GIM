@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { HiMapPin } from "react-icons/hi2";
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation';
+import { ChevronRight } from 'lucide-react';
 const GymMap = dynamic(() => import('@/components/Map'), { ssr: false });
 
 
@@ -21,6 +22,7 @@ const CREATE_BRANCH = () => {
   const [branchIsVisible, setBranchIsVisible] = useState<boolean>(false);
   const [locationY, setLocationY] = useState<number>();
   const [locationX, setLocationX] = useState<number>();
+  
   const router = useRouter();
   const onSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();   
@@ -43,8 +45,8 @@ const CREATE_BRANCH = () => {
     }
   }
   const onLocationSelect = (lat : number, lng: number) => {
-    setLocationX(lng);
-    setLocationY(lat);
+    setLocationX(lat);
+    setLocationY(lng);
   }
 
   return (
@@ -88,7 +90,7 @@ const CREATE_BRANCH = () => {
             />
           </div>
 
-          <Button type='submit' className='w-full mx-auto cursor-pointer'>Submit</Button>
+          <Button type='submit' className='w-full mx-auto cursor-pointer' variant={"material_blue"}>Submit <ChevronRight /> </Button>
         </form>
       </div>
       </div>
