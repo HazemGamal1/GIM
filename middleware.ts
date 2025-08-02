@@ -8,7 +8,7 @@ const isPublicRoute = createRouteMatcher(
         '/api/members/get-all',
         '/api/gyms/full-data',
         '/api/gyms/activate-member',
-        '/api/branches/get-branches',
+        '/api/gyms/branches/get-branches',
     ]
 )
 
